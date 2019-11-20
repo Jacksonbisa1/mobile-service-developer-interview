@@ -10,7 +10,7 @@ var get_menu_option = require('./lib/get-menu-option');
 var populate_menu = require('./lib/populate-menu');
 
 // initialize variables and constants
-const lang = 'swahili';
+const lang = 'kinyarwanda';
 const max_digits_for_account_number = 8;
 const max_digits_for_input = 2;
 const timeout_length = 60;
