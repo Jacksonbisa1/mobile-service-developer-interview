@@ -102,7 +102,7 @@ const max_digits_for_fraud_harassment_reporting = 180;
 const max_digits_for_input = 2;
 const timeout_length = 3600;
 
-// main function; prompts client to enter their 
+// main function; prompts client to enter their fraud/harassment reporting
 global.main = function(){
     sayText(msgs('main_splash'));
     promptDigits('account_number_splash', { 'submitOnHash' : false,
@@ -110,7 +110,7 @@ global.main = function(){
                                             'timeout'      : timeout_length });
 };   
     
-    // input hundler for fraud/harassment reporting
+    // input handler for fraud/harassment reporting
     addInputHandler('account_number_splash', function(input){
     try{
         var response = input.replace(/\D/g,'');
