@@ -45,7 +45,7 @@ addInputHandler('account_number_splash', function(input){
     }
     catch(error){
         console.log(error);
-        admin_alert('Error on USSD test integration : ' + error + '\nAccount number: ' + response, "ERROR, ERROR, ERROR", 'rodgers')
+        admin_alert('Error on USSD test integration : ' + error + '\nAccount number: ' + response, "ERROR, ERROR, ERROR", 'marisa')
         stopRules();
     }
 });
@@ -95,8 +95,48 @@ addInputHandler('menu_select', function(input){
             Hint: you can assume that Arsene is already set up as a user in the admin alert function.
         2. Prompt the client to write a brief (<180 characters) description of their issue.
 */
-addInputHandler('issue_menu_select', function(input){
-    // ADD YOUR CODE HERE
+
+ // initialize variables and constants
+const lang = 'kinyarwanda';
+const max_digits_for_fraud_harassment_reporting = 180;
+const max_digits_for_input = 2;
+const timeout_length = 3600;
+
+// main function; prompts client to enter their 
+global.main = function(){
+    sayText(msgs('main_splash'));
+    promptDigits('account_number_splash', { 'submitOnHash' : false,
+                                            'maxDigits'    : max_digits_for_fraud_harassment_reporting,
+                                            'timeout'      : timeout_length });
+};   
+    
+    // input hundler for fraud/harassment reporting
+    addInputHandler('account_number_splash', function(input){
+    try{
+        var response = input.replace(/\D/g,'');
+        var verify = require('./lib/account-verify');
+        if(verify(response)){
+            state.vars.account_number = response;
+            // display main menu and prompt user to select a menu option
+            var splash = 'main_menu';
+            var menu = populate_menu(splash, lang);
+            sayText(menu, lang);
+            promptDigits('menu_select', {'submitOnHash' : false, 'maxDigits' : max_digits_for_input, 'timeout' : 3600});
+        }
+        else{
+            sayText(msgs('invalid_account'));
+            promptDigits('account_number_splash', { 'submitOnHash' : false,
+                                                    'maxDigits'    : max_digits_for_account_number,
+                                                    'timeout'      : 3600 });
+        }
+    }
+    catch(error){
+        console.log(error);
+        admin_alert('Error on USSD test integration : ' + error + '\nAccount number: ' + response, "ERROR, ERROR, ERROR", 'arsene')
+        stopRules();
+    }
+});
+    
 });
 
 // let the client know that their message has been received
